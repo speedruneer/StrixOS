@@ -1,0 +1,18 @@
+In file included from src/kernel/dync/function.c:6:
+src/kernel/dync/function.c: In function 'new_func':
+src/kernel/dync/function.c:33:77: warning: ISO C forbids conversion of function pointer to object pointer type [-Wpedantic]
+   33 |     DEBUG_PRINT("[new_func] New function defined %s at address %p\n", name, (void*)source);
+      |                                                                             ^
+include/cyrillic.h:55:49: note: in definition of macro 'DEBUG_PRINT'
+   55 |     #define DEBUG_PRINT(fmt, ...) printf(fmt, ##__VA_ARGS__)
+      |                                                 ^~~~~~~~~~~
+src/kernel/main.c: In function 'main':
+src/kernel/main.c:134:14: warning: passing argument 1 of 'init_idt' from incompatible pointer type [-Wincompatible-pointer-types]
+  134 |     init_idt(&idt);
+      |              ^~~~
+      |              |
+      |              idt_entry_t (*)[256]
+In file included from src/kernel/main.c:11:
+include/idt.h:39:28: note: expected 'idt_entry_t *' but argument is of type 'idt_entry_t (*)[256]'
+   39 | void init_idt(idt_entry_t* idt);
+      |               ~~~~~~~~~~~~~^~~

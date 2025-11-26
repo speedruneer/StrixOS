@@ -1,0 +1,31 @@
+{
+    "files.associations": {
+        "*.zy": "java",
+        "*.gr": "csharp",
+        "stdint.h": "c",
+        "stdio.h": "c",
+        "compare": "cpp",
+        "cstdint": "cpp",
+        "sb16.h": "c",
+        "cyrillic.h": "c",
+        "string.h": "c",
+        "stddef.h": "c",
+        "array": "c",
+        "bitset": "c",
+        "string_view": "c",
+        "format": "c",
+        "initializer_list": "c",
+        "ranges": "c",
+        "span": "c",
+        "valarray": "c",
+        "function.h": "c",
+        "stdlib.h": "c",
+        "vesa.h": "c",
+        "asm.h": "c",
+        "idt.h": "c",
+        "text.h": "c",
+        "algorithm": "c",
+        "source_location": "c"
+    },
+    "makefile.configureOnOpen": false
+}
