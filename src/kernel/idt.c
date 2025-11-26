@@ -153,20 +153,18 @@ int timer_reached_end = 0;
 // -----------------------------
 // IRQ0 (PIT)
 // -----------------------------
-__attribute__((naked)) void irq0()
+__attribute__((naked)) void irq0(void)
 {
     asm volatile(
-        "pusha\n"                // save general registers
-
-        // C code equivalent: timer_reached_end = 1;
-        "movl $1, timer_reached_end\n"
-
-        // EOI
-        "movb $0x20, %al\n"
-        "outb %al, $0x20\n"
-
-        "popa\n"                 // restore general registers
-        "iret\n"
+        "pusha\n\t"
+        "movl $1, timer_reached_end\n\t"
+        "movb $0x20, %%al\n\t"
+        "outb %%al, $0x20\n\t"
+        "popa\n\t"
+        "iret\n\t"
+        :
+        :
+        : "al", "memory"
     );
 }
 
