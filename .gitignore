@@ -1,0 +1,6 @@
+*.img
+*.bin
+*.o
+*.json
+*.bc
+*.cb
