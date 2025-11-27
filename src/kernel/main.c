@@ -6,10 +6,10 @@
 #include <vesa.h>
 #include <text.h>
 #include <function.h>
+#include <memutils.h>
 #include <ata.h>
 #include <asm.h>
 #include <idt.h>
-#include <memutils.h>
 
 idt_entry_t idt[256];
 
@@ -116,6 +116,7 @@ void execute_command(const char* line);
 void main() {
     set_text_color(255,255,255,0,0,0);
     clear_screen(0,0,0);
+    init_font();
     text_init();
 
     printf("[kernel] Booted\n");

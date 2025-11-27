@@ -62,7 +62,7 @@ static void set_idt_entry(idt_entry_t* idt, int n, uint32_t handler, uint16_t se
     idt[n].offset_high = (handler >> 16) & 0xFFFF;
 }
 
-static void exception0()  {
+static void exception0()  { // #DIV, reboot exception 2
     asm volatile ("cli");
     if (*(char*)0x8027 == 0x76) {
         return;
@@ -81,7 +81,7 @@ static void exception2()  { base_exception("Non-Maskable Interrupt"); }
 static void exception3()  { base_exception("Breakpoint"); }
 static void exception4()  { base_exception("Overflow"); }
 static void exception5()  { base_exception("BOUND Range Exceeded"); }
-static void exception6()  {
+static void exception6()  { // #OP, reboot exception # 1
     asm volatile ("cli");
     if (*(char*)0x8027 == 0x76) {
         return;

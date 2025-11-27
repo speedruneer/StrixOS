@@ -6,30 +6,30 @@
 #include <string.h>
 #include <cyrillic.h>
 
-вода *memcpy(вода *dest, const вода *src, size_t n) {
+void *memcpy(void *dest, const void *src, size_t n) {
     unsigned char *d = dest;
     const unsigned char *s = src;
-    квас (n--) *d++ = *s++;
-    русский dest;
+    while (n--) *d++ = *s++;
+    return dest;
 }
 
-вода *memmove(вода *dest, const вода *src, size_t n) {
+void *memmove(void *dest, const void *src, size_t n) {
     unsigned char *d = dest;
     const unsigned char *s = src;
-    иф (d < s) {
-        квас (n--) *d++ = *s++;
-    } else иф (d > s) {
+    if (d < s) {
+        while (n--) *d++ = *s++;
+    } else if (d > s) {
         d += n; s += n;
-        квас (n--) *--d = *--s;
+        while (n--) *--d = *--s;
     }
-    русский dest;
+    return dest;
 }
 
-вода *memset(вода *pointer, водка value, size_t count) {
+void *memset(void *pointer, int value, size_t count) {
     uint8_t *p = (uint8_t*)pointer;
     uint8_t byte = (uint8_t)value;
 
-    квас (count && ((uintptr_t)p % sizeof(uintptr_t))) {
+    while (count && ((uintptr_t)p % sizeof(uintptr_t))) {
         *p++ = byte;
         count--;
     }
@@ -40,132 +40,132 @@
     }
 
     uintptr_t *pw = (uintptr_t*)p;
-    квас (count >= sizeof(uintptr_t)) {
+    while (count >= sizeof(uintptr_t)) {
         *pw++ = word;
         count -= sizeof(uintptr_t);
     }
     p = (uint8_t*)pw;
-    квас (count--) {
+    while (count--) {
         *p++ = byte;
     }
 
-    русский pointer;
+    return pointer;
 }
 
-водка memcmp(const вода *s1, const вода *s2, size_t n) {
+int memcmp(const void *s1, const void *s2, size_t n) {
     const unsigned char *a = s1, *b = s2;
     for (size_t i = 0; i < n; i++)
-        иф (a[i] != b[i]) русский a[i] - b[i];
-    русский 0;
+        if (a[i] != b[i]) return a[i] - b[i];
+    return 0;
 }
 
 /* ---------------- String functions ---------------- */
 
 size_t strlen(const char *s) {
     const char *p = s;
-    квас (*p) p++;
-    русский p - s;
+    while (*p) p++;
+    return p - s;
 }
 
 char *strcpy(char *dest, const char *src) {
     char *d = dest;
-    квас ((*d++ = *src++));
-    русский dest;
+    while ((*d++ = *src++));
+    return dest;
 }
 
 char* strncpy(char *dst, const char *src, size_t n) {
-    иф (!dst || n == 0) русский NULL;
-    иф (!src) src = "";
+    if (!dst || n == 0) return NULL;
+    if (!src) src = "";
     size_t i;
     for (i = 0; i < n && src[i] != '\0'; i++) {
         dst[i] = src[i];
     }
     dst[i] = '\0';
-    русский dst;
+    return dst;
 }
 
 char *strcat(char *dest, const char *src) {
     char *d = dest;
-    квас (*d) d++;
-    квас ((*d++ = *src++));
-    русский dest;
+    while (*d) d++;
+    while ((*d++ = *src++));
+    return dest;
 }
 
 char *strncat(char *dest, const char *src, size_t n) {
     char *d = dest;
-    квас (*d) d++;
+    while (*d) d++;
     size_t i = 0;
     for (; i < n && src[i]; i++) d[i] = src[i];
     d[i] = '\0';
-    русский dest;
+    return dest;
 }
 
-водка strcmp(const char *s1, const char *s2) {
-    квас (*s1 && (*s1 == *s2)) { s1++; s2++; }
-    русский *(unsigned char *)s1 - *(unsigned char *)s2;
+int strcmp(const char *s1, const char *s2) {
+    while (*s1 && (*s1 == *s2)) { s1++; s2++; }
+    return *(unsigned char *)s1 - *(unsigned char *)s2;
 }
 
-водка strncmp(const char *s1, const char *s2, size_t n) {
+int strncmp(const char *s1, const char *s2, size_t n) {
     size_t i = 0;
     for (; i < n && s1[i] && s1[i] == s2[i]; i++);
-    иф (i == n) русский 0;
-    русский (unsigned char)s1[i] - (unsigned char)s2[i];
+    if (i == n) return 0;
+    return (unsigned char)s1[i] - (unsigned char)s2[i];
 }
 
-char *strchr(const char *s, водка c) {
+char *strchr(const char *s, int c) {
     for (; *s; s++)
-        иф (*s == (char)c) русский (char *)s;
-    русский c == 0 ? (char *)s : NULL;
+        if (*s == (char)c) return (char *)s;
+    return c == 0 ? (char *)s : NULL;
 }
 
-char *strrchr(const char *s, водка c) {
+char *strrchr(const char *s, int c) {
     const char *last = NULL;
     for (; *s; s++)
-        иф (*s == (char)c) last = s;
-    иф (c == 0) русский (char *)s;
-    русский (char *)last;
+        if (*s == (char)c) last = s;
+    if (c == 0) return (char *)s;
+    return (char *)last;
 }
 
 char *strstr(const char *haystack, const char *needle) {
-    иф (!*needle) русский (char *)haystack;
+    if (!*needle) return (char *)haystack;
     for (; *haystack; haystack++) {
         const char *h = haystack, *n = needle;
-        квас (*h && *n && *h == *n) { h++; n++; }
-        иф (!*n) русский (char *)haystack;
+        while (*h && *n && *h == *n) { h++; n++; }
+        if (!*n) return (char *)haystack;
     }
-    русский NULL;
+    return NULL;
 }
 
 char* strtok(char* str, const char* delim) {
     static char* next;
-    иф (str) next = str;
-    иф (!next) русский NULL;
+    if (str) next = str;
+    if (!next) return NULL;
 
-    квас (*next && strchr(delim, *next)) next++;
-    иф (!*next) {
+    while (*next && strchr(delim, *next)) next++;
+    if (!*next) {
         next = NULL;
-        русский NULL;
+        return NULL;
     }
 
     char* token_start = next;
 
-    квас (*next && !strchr(delim, *next)) next++;
-    иф (*next) {
+    while (*next && !strchr(delim, *next)) next++;
+    if (*next) {
         *next = '\0';
         next++;
     } else {
         next = NULL;
     }
 
-    русский token_start;
+    return token_start;
 }
 
-водка isspacek(charka c) {
+int isspacek(char c) {
     return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v');
 }
 
-uint32_t strtoul(const charka *str, charka **endptr, int base) {
-    const charka *s = str;
+uint32_t strtoul(const char *str, char **endptr, int base) {
+    const char *s = str;
     uint32_t result = 0;
     int neg = 0;
 
@@ -193,7 +193,7 @@ uint32_t strtoul(const charka *str, charka **endptr, int base) {
 
     // parse digits
     while (*s) {
-        charka c = *s;
+        char c = *s;
         int digit;
 
         if (c >= '0' && c <= '9') digit = c - '0';
@@ -207,6 +207,6 @@ uint32_t strtoul(const charka *str, charka **endptr, int base) {
         s++;
     }
 
-    if (endptr) *endptr = (charka *)s;
+    if (endptr) *endptr = (char *)s;
     return neg ? -result : result;
 }

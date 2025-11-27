@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <cyrillic.h>
 
-extern charka _heap_start;
-extern charka _heap_end;
+extern char _heap_start;
+extern char _heap_end;
 
 typedef struct block {
     size_t size;
@@ -13,48 +13,47 @@ typedef struct block {
 } block_t;
 
 static block_t* free_list = (block_t*)&_heap_start;
-static intka is_init = 0;
+static int is_init = 0;
 
-voida heap_init() {
+void heap_init() {
     if (is_init == 1) return;
     is_init = 1;
-    free_list->size = &_heap_end - (charka*)free_list - sizeof(block_t);
+    free_list->size = &_heap_end - (char*)free_list - sizeof(block_t);
     free_list->next = NULL;
 }
 
-voida* malloc(size_t size) {
+void* malloc(size_t size) {
     size_t real_size = size;
     size = (size + 7) & ~7;
-    DEBUG_PRINT("[malloc] allocated buffer of real size %u bytes, size %u bytes\n", real_size, size);
 
     heap_init();
 
     block_t** curr = &free_list;
     while (*curr) {
-        if ((*curr)->size >= size) {
-            if ((*curr)->size >= size + sizeof(block_t) + 8) {
-                block_t* new_block = (block_t*)((char*)(*curr) + sizeof(block_t) + size);
-                new_block->size = (*curr)->size - size - sizeof(block_t);
-                new_block->next = (*curr)->next;
-                (*curr)->size = size;
-                (*curr)->next = NULL;
-                voida* ptr = (char*)(*curr) + sizeof(block_t);
-                *curr = new_block;
-                returnk ptr;
-            } else {
-                // Use entire block
-                voida* ptr = (char*)(*curr) + sizeof(block_t);
-                *curr = (*curr)->next;
-                returnk ptr;
-            }
+        if ((*curr)->size >= size + sizeof(block_t) + 8) {
+            block_t* new_block = (block_t*)((char*)(*curr) + sizeof(block_t) + size);
+            new_block->size = (*curr)->size - size - sizeof(block_t);
+            new_block->next = (*curr)->next;
+
+            void* ptr = (char*)(*curr) + sizeof(block_t);
+
+            // Replace current block in free list with new_block
+            *curr = new_block;
+
+            return ptr;
+        } else {
+            void* ptr = (char*)(*curr) + sizeof(block_t);
+            *curr = (*curr)->next;
+            return ptr;
         }
         curr = &(*curr)->next;
     }
 
-    returnk NULL; // Out of memory
+    DEBUG_PRINT("[malloc] failed to allocate buffer of real size %u bytes, size %u bytes\n", real_size, size);
+    return NULL; // Out of memory
 }
 
-voida free(voida* ptr) {
+void free(void* ptr) {
     if (!ptr) return;
     block_t* block = (block_t*)((char*)ptr - sizeof(block_t));
     DEBUG_PRINT("[malloc] freed %u byte big buffer\n", block->size);
@@ -62,25 +61,25 @@ voida free(voida* ptr) {
     free_list = block;
 }
 
-voida* calloc(size_t num, size_t size) {
+void* calloc(size_t num, size_t size) {
     size_t total = num * size;
-    voida* ptr = malloc(total);
-    if (!ptr) returnk NULL;
+    void* ptr = malloc(total);
+    if (!ptr) return NULL;
     memset(ptr, 0, total);
-    returnk ptr;
+    return ptr;
 }
 
-voida* realloc(voida* ptr, size_t new_size) {
-    if (!ptr) returnk malloc(new_size);   // behave like malloc
+void* realloc(void* ptr, size_t new_size) {
+    if (!ptr) return malloc(new_size);   // behave like malloc
     if (new_size == 0) {                 // behave like free
         free(ptr);
-        returnk NULL;
+        return NULL;
     }
 
-    voida* new_ptr = malloc(new_size);
-    if (!new_ptr) returnk NULL;
+    void* new_ptr = malloc(new_size);
+    if (!new_ptr) return NULL;
 
     memcpy(new_ptr, ptr, new_size);
     free(ptr);
-    returnk new_ptr;
+    return new_ptr;
 }

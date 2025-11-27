@@ -10,14 +10,14 @@ SECTIONS
         *(.text)
     }
 
-    .rodata ALIGN(4K) :
-    {
-        *(.rodata)
-    }
-
     .data ALIGN(4K) :
     {
         *(.data)
+    }
+
+    .rodata ALIGN(4K) :
+    {
+        *(.rodata)
     }
 
     .bss ALIGN(4K) :

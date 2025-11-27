@@ -15,14 +15,19 @@ function new_func(function source, const char* name) {
     if (!functions) {
         function_capacity = FUNCTION_CAPACITY; // initial capacity
         functions = (record_func_t*)malloc(sizeof(record_func_t) * function_capacity);
-        if (!functions) returnk NULL;
+        if (!functions) {
+            printf("[functions] Malloc failed\n");
+        }
+        DEBUG_PRINT("[functions]: malloc %u\n", sizeof(record_func_t)*function_capacity);
+        printf("FUNCTIONS %p\n", functions);
+        if (!functions) return NULL;
     }
 
     // Grow array if needed
     if (function_count == function_capacity) {
         function_capacity *= 2;
         record_func_t* tmp = (record_func_t*)realloc(functions, sizeof(record_func_t) * function_capacity);
-        if (!tmp) returnk NULL;
+        if (!tmp) return NULL;
         functions = tmp;
     }
 
@@ -32,7 +37,7 @@ function new_func(function source, const char* name) {
 
     DEBUG_PRINT("[new_func] New function defined %s at address %p\n", name, (void*)source);
 
-    returnk functions[function_count++].func;
+    return functions[function_count++].func;
 }
 
 // get function by name
@@ -40,9 +45,9 @@ function get_func(const char* name) {
     if (!functions) returnk NULL;
     for (size_t i = 0; i < function_count; i++) {
         if (strcmp(functions[i].name, name) == 0)
-            returnk functions[i].func;
+            return functions[i].func;
     }
-    returnk NULL;
+    return NULL;
 }
 
 // optional cleanup

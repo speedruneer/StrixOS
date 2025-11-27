@@ -2,6 +2,7 @@
 global entry_start
 extern vesa_mode_info
 extern font
+extern base_font
 
 entry_start:
 
@@ -16,7 +17,7 @@ int 10h
 mov ax, 0x4F02
 int 10h
 
-mov di, font
+mov di, base_font
 push    ds
 push    es
 mov	    ax, 1130h
