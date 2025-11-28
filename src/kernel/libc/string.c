@@ -164,7 +164,7 @@ int isspacek(char c) {
     return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v');
 }
 
-uint32_t strtoul(const char *str, char **endptr, int base) {
+long unsigned int strtoul(const char *str, char **endptr, int base) {
     const char *s = str;
     uint32_t result = 0;
     int neg = 0;

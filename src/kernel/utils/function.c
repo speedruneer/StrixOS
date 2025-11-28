@@ -18,8 +18,7 @@ function new_func(function source, const char* name) {
         if (!functions) {
             printf("[functions] Malloc failed\n");
         }
-        DEBUG_PRINT("[functions]: malloc %u\n", sizeof(record_func_t)*function_capacity);
-        printf("FUNCTIONS %p\n", functions);
+        DEBUG_PRINT("[functions]: Allocated %u bytes\n", sizeof(record_func_t)*function_capacity);
         if (!functions) return NULL;
     }
 
@@ -35,7 +34,7 @@ function new_func(function source, const char* name) {
     strncpy(functions[function_count].name, name, MAX_NAME_LEN - 1);
     functions[function_count].name[MAX_NAME_LEN - 1] = '\0';
 
-    DEBUG_PRINT("[new_func] New function defined %s at address %p\n", name, (void*)source);
+    DEBUG_PRINT("[new_func] New function defined %s at address 0x%02X\n", name, (void*)source);
 
     return functions[function_count++].func;
 }

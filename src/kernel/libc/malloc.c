@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <cyrillic.h>
 
+
 extern char _heap_start;
 extern char _heap_end;
 

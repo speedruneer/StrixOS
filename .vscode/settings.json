@@ -25,7 +25,9 @@
         "idt.h": "c",
         "text.h": "c",
         "algorithm": "c",
-        "source_location": "c"
+        "source_location": "c",
+        "cstdlib": "c",
+        "string": "c"
     },
     "makefile.configureOnOpen": false
 }
